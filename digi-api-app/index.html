@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DigiAPI Explorer - Método GET</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Encabezado Principal -->
+    <header class="app-header">
+      <div class="title-container">
+        <h1 class="main-title">DigiAPI Explorer</h1>
+        <span class="method-pill">Método GET</span>
+      </div>
+    </header>
+
+    <!-- Barra de Búsqueda y Botones -->
+    <section class="search-section">
+      <form id="searchForm" class="search-form">
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Escribe el nombre o ID (ej: Agumon, Gabumon, 1)..." 
+            autocomplete="off"
+            required
+          >
+          <button type="button" id="clearBtn" class="clear-btn" title="Limpiar">&times;</button>
+        </div>
+        
+        <div class="button-group">
+          <button type="submit" id="searchBtn" class="btn btn-primary">Buscar</button>
+          <button type="button" id="randomBtn" class="btn btn-secondary">Aleatorio</button>
+        </div>
+      </form>
+
+      <!-- Accesos rápidos -->
+      <div class="quick-tags">
+        <span class="quick-label">Sugerencias:</span>
+        <button type="button" class="quick-btn" data-name="Agumon">Agumon</button>
+        <button type="button" class="quick-btn" data-name="Gabumon">Gabumon</button>
+        <button type="button" class="quick-btn" data-name="Patamon">Patamon</button>
+        <button type="button" class="quick-btn" data-name="Tailmon">Tailmon</button>
+        <button type="button" class="quick-btn" data-name="War Greymon">War Greymon</button>
+        <button type="button" class="quick-btn" data-name="Angemon">Angemon</button>
+      </div>
+    </section>
+
+    <!-- Monitor de Petición HTTP -->
+    <section class="http-monitor" id="httpMonitor">
+      <div class="monitor-header">
+        <span>Registro de Petición HTTP (Fetch)</span>
+        <span id="statusCodeBadge" class="status-badge status-idle">EN ESPERA</span>
+      </div>
+      <div class="monitor-body">
+        <div class="monitor-row">
+          <span class="label">Método:</span>
+          <span class="badge-get">GET</span>
+        </div>
+        <div class="monitor-row">
+          <span class="label">Endpoint:</span>
+          <code id="requestUrl">https://digi-api.com/api/v1/digimon/agumon</code>
+        </div>
+        <div class="monitor-row">
+          <span class="label">Tiempo:</span>
+          <span id="responseTime">-</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Estado: Cargando -->
+    <div id="loader" class="loader-container" style="display: none;">
+      <p class="loader-text">Consultando datos a la API con <code>fetch()</code>...</p>
+    </div>
+
+    <!-- Estado: Error -->
+    <div id="errorMessage" class="error-container" style="display: none;">
+      <h3 id="errorTitle">No se encontró el Digimon</h3>
+      <p id="errorDetails">Verifica el nombre o ID e intenta nuevamente.</p>
+    </div>
+
+    <!-- Tarjeta Principal de Información -->
+    <main id="digimonContainer" class="digimon-details" style="display: none;">
+      <!-- Lado Izquierdo: Imagen y Datos Básicos -->
+      <div class="card-left">
+        <div class="image-box">
+          <span class="digimon-id" id="digimonId">#001</span>
+          <img id="digimonImage" src="" alt="Digimon" class="digimon-img">
+        </div>
+        <h2 class="digimon-name" id="digimonName">Nombre</h2>
+        
+        <div class="badge-list">
+          <div class="tag-badge level-badge" id="digimonLevel">Nivel: -</div>
+          <div class="tag-badge attribute-badge" id="digimonAttribute">Atributo: -</div>
+          <div class="tag-badge type-badge" id="digimonType">Tipo: -</div>
+        </div>
+      </div>
+
+      <!-- Lado Derecho: Detalles y Ataques -->
+      <div class="card-right">
+        <!-- Familias / Campos -->
+        <div class="detail-box">
+          <h3 class="box-title">Familias y Campos Digitales</h3>
+          <div id="digimonFields" class="fields-container"></div>
+        </div>
+
+        <!-- Biografía / Descripción -->
+        <div class="detail-box">
+          <h3 class="box-title">Biografía y Registro Oficial</h3>
+          <p id="digimonDescription" class="description-text">Cargando...</p>
+        </div>
+
+        <!-- Ataques -->
+        <div class="detail-box">
+          <h3 class="box-title">Ataques y Habilidades de Combate</h3>
+          <div id="digimonSkills" class="skills-list"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Galería inferior -->
+    <section class="gallery-section">
+      <div class="section-header">
+        <h3>Más Digimon en la Red (Petición GET múltiple)</h3>
+        <p>Haz clic sobre cualquiera para cargar sus estadísticas:</p>
+      </div>
+      <div id="digimonGrid" class="digimon-grid"></div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
